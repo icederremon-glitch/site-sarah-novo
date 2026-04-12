@@ -165,7 +165,7 @@ window.addEventListener("load", () => {
   const ponyo = document.createElement("img");
 
   // 🔥 CORREÇÃO AQUI
-  ponyo.src = "/ponyo.png";
+  ponyo.src = "/Ponyo.png";
 
   ponyo.classList.add("ponyo");
   document.body.appendChild(ponyo);

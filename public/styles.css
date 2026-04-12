@@ -1,0 +1,299 @@
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+/* BASE */
+body{
+  background: radial-gradient(circle at 50% 20%, #123c5c, #071a2c 80%);
+  overflow-x:hidden;
+  color:white;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* 🌊 BRILHO DA ÁGUA */
+body::before{
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  width:200%;
+  height:200%;
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.05),
+    transparent
+  );
+  animation:agua 12s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes agua{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-50%); }
+}
+
+/* HEADER */
+header{
+  text-align:center;
+  margin-top:30px;
+}
+
+header h1{
+  font-size:28px;
+}
+
+header p{
+  opacity:0.7;
+  font-size:14px;
+}
+
+/* CONTAINER */
+.container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-top:20px;
+  flex:1;
+}
+
+/* CARD */
+.card{
+  background:rgba(36,58,77,0.7);
+  backdrop-filter:blur(10px);
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:20px;
+  width:420px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+
+/* CHAT */
+.chat-card{
+  display:flex;
+  flex-direction:column;
+}
+
+#chat{
+  height:380px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  padding-right:5px;
+  scroll-behavior:smooth;
+}
+
+/* SCROLL */
+#chat::-webkit-scrollbar{
+  width:6px;
+}
+
+#chat::-webkit-scrollbar-thumb{
+  background:#4fc3f7;
+  border-radius:10px;
+}
+
+/* MENSAGENS */
+.msg{
+  padding:10px 14px;
+  border-radius:15px;
+  margin:6px;
+  max-width:85%;
+  font-size:14px;
+  line-height:1.5;
+  word-wrap:break-word;
+  animation:fade 0.3s ease;
+}
+
+@keyframes fade{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.user{
+  background:#4fc3f7;
+  align-self:flex-end;
+  color:black;
+}
+
+.bot{
+  background:#37474f;
+  align-self:flex-start;
+}
+
+/* INPUT */
+.input-area{
+  display:flex;
+  margin-top:10px;
+}
+
+.input-area input{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  outline:none;
+}
+
+.input-area button{
+  margin-left:5px;
+  padding:12px 16px;
+  border:none;
+  border-radius:10px;
+  background:#4fc3f7;
+  color:white;
+  cursor:pointer;
+}
+
+/* 🐟 PEIXES (emoji controlado via JS) */
+.peixe{
+  position:fixed;
+  font-size:20px;
+  pointer-events:none;
+  z-index:1;
+  opacity:0.85;
+}
+
+/* 🐋 BALEIA */
+.baleia{
+  position:fixed;
+  bottom:40px;
+  left:-200px;
+  width:120px;
+  height:60px;
+  background:linear-gradient(135deg, #5ecbff, #2aa3d9);
+  border-radius:50px;
+  box-shadow:0 0 40px rgba(94,203,255,0.8);
+  animation:nadar 40s linear infinite;
+  z-index:2;
+}
+
+@keyframes nadar{
+  0%{ left:-200px; }
+  100%{ left:110vw; }
+}
+
+/* OLHO */
+.baleia::after{
+  content:"";
+  position:absolute;
+  width:8px;
+  height:8px;
+  background:black;
+  border-radius:50%;
+  top:20px;
+  right:25px;
+}
+
+/* CAUDA */
+.baleia::before{
+  content:"";
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:#2aa3d9;
+  border-radius:50%;
+  left:-10px;
+  top:20px;
+}
+
+/* 💨 BOLHAS DA BALEIA */
+.bolha{
+  position:fixed;
+  width:6px;
+  height:6px;
+  background:white;
+  border-radius:50%;
+  opacity:0.7;
+  animation:subir 4s linear;
+  z-index:1;
+}
+
+@keyframes subir{
+  from{ transform:translateY(0); opacity:0.7; }
+  to{ transform:translateY(-120px); opacity:0; }
+}
+
+/* ✨ PARTICULAS */
+.particula{
+  position:fixed;
+  width:2px;
+  height:2px;
+  background:white;
+  opacity:0.3;
+  animation:flutuar 10s linear infinite;
+}
+
+@keyframes flutuar{
+  from{ transform:translateY(100vh); }
+  to{ transform:translateY(-10vh); }
+}
+
+/* 🐠 PONYO */
+.ponyo{
+  position:fixed;
+  width:90px;
+  bottom:120px;
+  left:-120px;
+  z-index:2;
+  pointer-events:none;
+
+  animation:ponyoNadar 35s linear infinite;
+
+  mix-blend-mode: lighten;
+}
+
+@keyframes ponyoNadar{
+  0%{
+    left:-120px;
+    transform:scaleX(1);
+  }
+  49%{
+    transform:scaleX(1);
+  }
+  50%{
+    transform:scaleX(-1);
+  }
+  100%{
+    left:110vw;
+    transform:scaleX(-1);
+  }
+}
+
+/* 💙 BOLHAS DA PONYO */
+.bolha-ponyo{
+  position:fixed;
+  width:5px;
+  height:5px;
+  background:white;
+  border-radius:50%;
+  opacity:0.6;
+  animation:subirPonyo 3s linear forwards;
+  z-index:1;
+}
+
+@keyframes subirPonyo{
+  from{
+    transform:translateY(0);
+    opacity:0.6;
+  }
+  to{
+    transform:translateY(-80px);
+    opacity:0;
+  }
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  margin-top:auto;
+  padding:20px;
+  opacity:0.7;
+  font-size:14px;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosso Mundo Ponyo 💙</title>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header>
+  <h1>🌊 Nosso mundinho Gibi 💙</h1>
+  <p>Sarah, você é minha Ponyo 🐠✨</p>
+</header>
+
+<main class="container">
+
+  <div class="card">
+    <h2>⏳ Nosso tempo juntos</h2>
+    <p id="contador"></p>
+  </div>
+
+  <div class="card chat-card">
+    <h2>💬 Fala comigo 💙</h2>
+
+    <div id="chat"></div>
+
+    <div class="input-area">
+      <input id="input" placeholder="Fala comigo..."
+      onkeydown="if(event.key==='Enter') sendMessage()">
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  💙 Feito com amor, para Mamor 🐋
+</footer>
+
+<!-- 🐋 BALEIA -->
+<div class="baleia"></div>
+
+<!-- 🐠 PONYO -->
+<img src="ponyo.png" class="ponyo">
+
+<script src="script.js"></script>
+</body>
+</html>

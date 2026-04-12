@@ -37,16 +37,26 @@ app.post("/chat", async (req, res) => {
 
     const data = await response.json();
 
-    const reply = data.choices?.[0]?.message?.content 
-      || "deu ruim aqui 😢 mas continuo contigo 💙";
+    console.log("RESPOSTA OPENAI:", data); // 🔥 debug importante
+
+    const reply = data?.choices?.[0]?.message?.content;
+
+    if (!reply) {
+      return res.json({
+        reply: "Tive um bug aqui 😢 mas continuo contigo 💙"
+      });
+    }
 
     memoria.push({ role: "assistant", content: reply });
 
     res.json({ reply });
 
   } catch (err) {
-    console.log(err);
-    res.json({ reply: "erro 😢 mas ainda to aqui 💙" });
+    console.log("ERRO REAL:", err);
+
+    res.json({
+      reply: "Erro no servidor 😢 mas ainda to aqui com você 💙"
+    });
   }
 });
 

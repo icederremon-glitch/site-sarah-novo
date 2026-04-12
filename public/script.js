@@ -73,7 +73,7 @@ function addMessage(text, type){
 
 
 // =======================
-// 🐟 PEIXES (CORRIGIDOS)
+// 🐟 PEIXES (AGORA CORRETOS MESMO)
 // =======================
 function criarPeixe(){
   const peixe = document.createElement("div");
@@ -87,24 +87,26 @@ function criarPeixe(){
   const duracao = 15000 + Math.random()*8000;
 
   if(Math.random() > 0.5){
-    // esquerda → direita (olhando pra direita)
+    // esquerda → direita
     peixe.style.left = "-40px";
+    peixe.style.transform = "scaleX(1)";
 
     peixe.animate([
-      { transform:"translateX(0) scaleX(1)" },
-      { transform:"translateX(120vw) scaleX(1)" }
+      { left:"-40px" },
+      { left:"110vw" }
     ],{
       duration: duracao,
       easing:"linear"
     });
 
   }else{
-    // direita → esquerda (olhando pra esquerda)
+    // direita → esquerda
     peixe.style.left = "110vw";
+    peixe.style.transform = "scaleX(-1)";
 
     peixe.animate([
-      { transform:"translateX(0) scaleX(-1)" },
-      { transform:"translateX(-120vw) scaleX(-1)" }
+      { left:"110vw" },
+      { left:"-40px" }
     ],{
       duration: duracao,
       easing:"linear"
@@ -159,17 +161,16 @@ setInterval(criarParticula, 500);
 // =======================
 // 🐠 PONYO + BOLHAS
 // =======================
-
-// cria a ponyo automaticamente
 window.addEventListener("load", () => {
   const ponyo = document.createElement("img");
-  ponyo.src = "ponyo.png"; // nome do seu arquivo
+
+  // 🔥 CORREÇÃO AQUI
+  ponyo.src = "/ponyo.png";
+
   ponyo.classList.add("ponyo");
   document.body.appendChild(ponyo);
 });
 
-
-// bolhas da ponyo
 setInterval(() => {
   const ponyo = document.querySelector(".ponyo");
   if (!ponyo) return;

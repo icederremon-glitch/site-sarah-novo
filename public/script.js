@@ -73,7 +73,7 @@ function addMessage(text, type){
 
 
 // =======================
-// 🐟 PEIXES (AGORA CORRETOS MESMO)
+// 🐟 PEIXES (CORRIGIDOS DE VERDADE)
 // =======================
 function criarPeixe(){
   const peixe = document.createElement("div");
@@ -102,7 +102,7 @@ function criarPeixe(){
   }else{
     // direita → esquerda
     peixe.style.left = "110vw";
-    peixe.style.transform = "scaleX(-1)";
+    peixe.style.transform = "rotateY(180deg)"; // 🔥 corrigido
 
     peixe.animate([
       { left:"110vw" },
@@ -161,15 +161,8 @@ setInterval(criarParticula, 500);
 // =======================
 // 🐠 PONYO + BOLHAS
 // =======================
-window.addEventListener("load", () => {
-  const ponyo = document.createElement("img");
 
-  // 🔥 CORREÇÃO AQUI
-  ponyo.src = "/Ponyo.png";
-
-  ponyo.classList.add("ponyo");
-  document.body.appendChild(ponyo);
-});
+// ❌ REMOVIDO: criação da Ponyo via JS (evita duplicação)
 
 setInterval(() => {
   const ponyo = document.querySelector(".ponyo");

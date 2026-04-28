@@ -1,15 +1,27 @@
 // =======================
 // ⏳ CONTADOR REAL
 // =======================
-const inicio = new Date("2023-09-27T00:00:00");
+const inicio = new Date(2023, 8, 27);
 
 function atualizarContador(){
+
   const hoje = new Date();
 
-  const diferenca = hoje.getTime() - inicio.getTime();
+  const inicioUTC = Date.UTC(
+    inicio.getFullYear(),
+    inicio.getMonth(),
+    inicio.getDate()
+  );
+
+  const hojeUTC = Date.UTC(
+    hoje.getFullYear(),
+    hoje.getMonth(),
+    hoje.getDate()
+  );
 
   const dias = Math.floor(
-    diferenca / (1000 * 60 * 60 * 24)
+    (hojeUTC - inicioUTC) /
+    (1000 * 60 * 60 * 24)
   );
 
   document.getElementById("contador").innerText =
@@ -30,10 +42,13 @@ const mensagensIniciais = [
 ];
 
 function iniciarMensagens(){
+
   mensagensIniciais.forEach((msg, i)=>{
+
     setTimeout(()=>{
       addMessage(msg, "bot");
     }, i * 1200);
+
   });
 
   renderHistorico();
@@ -73,8 +88,15 @@ function salvarHistorico(pergunta){
 
 function renderHistorico(){
 
-  const historico =
+  let historico =
     JSON.parse(localStorage.getItem("historico")) || [];
+
+  // 🔥 remove formatos antigos bugados
+  historico = historico.filter(item =>
+    typeof item === "object" &&
+    item.texto &&
+    item.data
+  );
 
   const area =
     document.getElementById("historico");
@@ -102,22 +124,31 @@ function renderHistorico(){
 // 💬 CHAT
 // =======================
 async function sendMessage(){
-  const input = document.getElementById("input");
-  const text = input.value.trim();
+
+  const input =
+    document.getElementById("input");
+
+  const text =
+    input.value.trim();
 
   if(!text) return;
 
   addMessage(text, "user");
+
   salvarHistorico(text);
 
   input.value = "";
 
   try{
+
     const res = await fetch("/chat", {
+
       method:"POST",
+
       headers:{
         "Content-Type":"application/json"
       },
+
       body: JSON.stringify({
         message:text
       })
@@ -128,21 +159,28 @@ async function sendMessage(){
     addMessage(data.reply, "bot");
 
   }catch{
+
     addMessage("Deu erro 😢", "bot");
   }
 }
 
-function addMessage(text, type){
-  const chat = document.getElementById("chat");
 
-  const msg = document.createElement("div");
+function addMessage(text, type){
+
+  const chat =
+    document.getElementById("chat");
+
+  const msg =
+    document.createElement("div");
 
   msg.classList.add("msg", type);
+
   msg.innerText = text;
 
   chat.appendChild(msg);
 
-  chat.scrollTop = chat.scrollHeight;
+  chat.scrollTop =
+    chat.scrollHeight;
 }
 
 
@@ -150,7 +188,9 @@ function addMessage(text, type){
 // 🐟 PEIXES
 // =======================
 function criarPeixe(){
-  const peixe = document.createElement("div");
+
+  const peixe =
+    document.createElement("div");
 
   peixe.classList.add("peixe");
 
@@ -164,8 +204,11 @@ function criarPeixe(){
 
   if(Math.random() > 0.5){
 
+    // esquerda -> direita
     peixe.style.left = "-40px";
-    peixe.style.transform = "rotateY(180deg)";
+
+    peixe.style.transform =
+      "rotateY(180deg)";
 
     peixe.animate([
       { left:"-40px" },
@@ -177,8 +220,11 @@ function criarPeixe(){
 
   }else{
 
+    // direita -> esquerda
     peixe.style.left = "110vw";
-    peixe.style.transform = "none";
+
+    peixe.style.transform =
+      "none";
 
     peixe.animate([
       { left:"110vw" },
@@ -203,6 +249,7 @@ setInterval(criarPeixe, 3000);
 // 🫧 BOLHAS BALEIA
 // =======================
 setInterval(()=>{
+
   const baleia =
     document.querySelector(".baleia");
 
@@ -216,8 +263,11 @@ setInterval(()=>{
 
   bolha.classList.add("bolha");
 
-  bolha.style.left = rect.right + "px";
-  bolha.style.top = rect.top + "px";
+  bolha.style.left =
+    rect.right + "px";
+
+  bolha.style.top =
+    rect.top + "px";
 
   document.body.appendChild(bolha);
 
@@ -233,7 +283,8 @@ setInterval(()=>{
 // =======================
 function criarParticula(){
 
-  const p = document.createElement("div");
+  const p =
+    document.createElement("div");
 
   p.classList.add("particula");
 

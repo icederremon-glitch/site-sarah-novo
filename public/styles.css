@@ -297,3 +297,31 @@ footer{
   opacity:0.7;
   font-size:14px;
 }
+/* 📜 HISTÓRICO */
+.historico-card{
+  background:rgba(36,58,77,0.7);
+  backdrop-filter:blur(10px);
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:20px;
+  width:420px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+
+.historico-card h3{
+  margin-bottom:10px;
+}
+
+#historico{
+  max-height:180px;
+  overflow-y:auto;
+}
+
+.item-historico{
+  background:rgba(255,255,255,0.05);
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:8px;
+  font-size:13px;
+  opacity:0.9;
+}

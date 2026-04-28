@@ -1,11 +1,17 @@
 // =======================
-// ⏳ CONTADOR
+// ⏳ CONTADOR REAL
 // =======================
-const inicio = new Date("2023-09-27");
+const inicio = new Date("2023-09-27T00:00:00");
 
 function atualizarContador(){
   const hoje = new Date();
-  const dias = Math.floor((hoje - inicio) / (1000 * 60 * 60 * 24));
+
+  const diferenca = hoje.getTime() - inicio.getTime();
+
+  const dias = Math.floor(
+    diferenca / (1000 * 60 * 60 * 24)
+  );
+
   document.getElementById("contador").innerText =
     `${dias} dias juntos 💖`;
 }
@@ -29,9 +35,46 @@ function iniciarMensagens(){
       addMessage(msg, "bot");
     }, i * 1200);
   });
+
+  renderHistorico();
 }
 
 window.onload = iniciarMensagens;
+
+
+// =======================
+// 📜 HISTÓRICO
+// =======================
+function salvarHistorico(pergunta){
+  let historico =
+    JSON.parse(localStorage.getItem("historico")) || [];
+
+  historico.unshift(pergunta);
+
+  historico = historico.slice(0, 15);
+
+  localStorage.setItem(
+    "historico",
+    JSON.stringify(historico)
+  );
+
+  renderHistorico();
+}
+
+function renderHistorico(){
+  const historico =
+    JSON.parse(localStorage.getItem("historico")) || [];
+
+  const area = document.getElementById("historico");
+
+  if(!area) return;
+
+  area.innerHTML = historico.map(item => `
+    <div class="item-historico">
+      💙 ${item}
+    </div>
+  `).join("");
+}
 
 
 // =======================
@@ -40,19 +83,27 @@ window.onload = iniciarMensagens;
 async function sendMessage(){
   const input = document.getElementById("input");
   const text = input.value.trim();
+
   if(!text) return;
 
   addMessage(text, "user");
+  salvarHistorico(text);
+
   input.value = "";
 
   try{
     const res = await fetch("/chat", {
       method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ message:text })
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        message:text
+      })
     });
 
     const data = await res.json();
+
     addMessage(data.reply, "bot");
 
   }catch{
@@ -64,32 +115,36 @@ function addMessage(text, type){
   const chat = document.getElementById("chat");
 
   const msg = document.createElement("div");
+
   msg.classList.add("msg", type);
   msg.innerText = text;
 
   chat.appendChild(msg);
+
   chat.scrollTop = chat.scrollHeight;
 }
 
 
 // =======================
-// 🐟 PEIXES (CORREÇÃO FINAL)
+// 🐟 PEIXES
 // =======================
 function criarPeixe(){
   const peixe = document.createElement("div");
+
   peixe.classList.add("peixe");
 
   peixe.innerText = "🐠";
 
-  const y = Math.random()*80 + "vh";
-  peixe.style.top = y;
+  peixe.style.top =
+    Math.random()*80 + "vh";
 
-  const duracao = 15000 + Math.random()*8000;
+  const duracao =
+    15000 + Math.random()*8000;
 
   if(Math.random() > 0.5){
-    // esquerda → direita
+
     peixe.style.left = "-40px";
-    peixe.style.transform = "rotateY(180deg)"; // 🔥 vira pra direita
+    peixe.style.transform = "rotateY(180deg)";
 
     peixe.animate([
       { left:"-40px" },
@@ -100,9 +155,9 @@ function criarPeixe(){
     });
 
   }else{
-    // direita → esquerda
+
     peixe.style.left = "110vw";
-    peixe.style.transform = "none"; // 🔥 já está virado certo
+    peixe.style.transform = "none";
 
     peixe.animate([
       { left:"110vw" },
@@ -114,22 +169,30 @@ function criarPeixe(){
   }
 
   document.body.appendChild(peixe);
-  setTimeout(()=>peixe.remove(), duracao);
+
+  setTimeout(()=>{
+    peixe.remove();
+  }, duracao);
 }
 
 setInterval(criarPeixe, 3000);
 
 
 // =======================
-// 🫧 BOLHAS DA BALEIA
+// 🫧 BOLHAS BALEIA
 // =======================
 setInterval(()=>{
-  const baleia = document.querySelector(".baleia");
+  const baleia =
+    document.querySelector(".baleia");
+
   if(!baleia) return;
 
-  const rect = baleia.getBoundingClientRect();
+  const rect =
+    baleia.getBoundingClientRect();
 
-  const bolha = document.createElement("div");
+  const bolha =
+    document.createElement("div");
+
   bolha.classList.add("bolha");
 
   bolha.style.left = rect.right + "px";
@@ -137,7 +200,10 @@ setInterval(()=>{
 
   document.body.appendChild(bolha);
 
-  setTimeout(()=>bolha.remove(), 4000);
+  setTimeout(()=>{
+    bolha.remove();
+  }, 4000);
+
 }, 900);
 
 
@@ -145,14 +211,19 @@ setInterval(()=>{
 // ✨ PARTICULAS
 // =======================
 function criarParticula(){
+
   const p = document.createElement("div");
+
   p.classList.add("particula");
 
-  p.style.left = Math.random()*100 + "vw";
+  p.style.left =
+    Math.random()*100 + "vw";
 
   document.body.appendChild(p);
 
-  setTimeout(()=>p.remove(), 10000);
+  setTimeout(()=>{
+    p.remove();
+  }, 10000);
 }
 
 setInterval(criarParticula, 500);
@@ -161,19 +232,31 @@ setInterval(criarParticula, 500);
 // =======================
 // 🐠 PONYO + BOLHAS
 // =======================
-setInterval(() => {
-  const ponyo = document.querySelector(".ponyo");
-  if (!ponyo) return;
+setInterval(()=>{
 
-  const rect = ponyo.getBoundingClientRect();
+  const ponyo =
+    document.querySelector(".ponyo");
 
-  const bolha = document.createElement("div");
+  if(!ponyo) return;
+
+  const rect =
+    ponyo.getBoundingClientRect();
+
+  const bolha =
+    document.createElement("div");
+
   bolha.className = "bolha-ponyo";
 
-  bolha.style.left = rect.left + 20 + "px";
-  bolha.style.top = rect.top + 20 + "px";
+  bolha.style.left =
+    rect.left + 20 + "px";
+
+  bolha.style.top =
+    rect.top + 20 + "px";
 
   document.body.appendChild(bolha);
 
-  setTimeout(() => bolha.remove(), 3000);
+  setTimeout(()=>{
+    bolha.remove();
+  }, 3000);
+
 }, 500);

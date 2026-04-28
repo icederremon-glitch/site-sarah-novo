@@ -46,10 +46,19 @@ window.onload = iniciarMensagens;
 // 📜 HISTÓRICO
 // =======================
 function salvarHistorico(pergunta){
+
   let historico =
     JSON.parse(localStorage.getItem("historico")) || [];
 
-  historico.unshift(pergunta);
+  const agora = new Date();
+
+  const dataHora =
+    agora.toLocaleString("pt-BR");
+
+  historico.unshift({
+    texto: pergunta,
+    data: dataHora
+  });
 
   historico = historico.slice(0, 15);
 
@@ -61,20 +70,32 @@ function salvarHistorico(pergunta){
   renderHistorico();
 }
 
+
 function renderHistorico(){
+
   const historico =
     JSON.parse(localStorage.getItem("historico")) || [];
 
-  const area = document.getElementById("historico");
+  const area =
+    document.getElementById("historico");
 
   if(!area) return;
 
   area.innerHTML = historico.map(item => `
     <div class="item-historico">
-      💙 ${item}
+
+      <div class="historico-data">
+        🕒 ${item.data}
+      </div>
+
+      <div>
+        💙 ${item.texto}
+      </div>
+
     </div>
   `).join("");
 }
+
 
 
 // =======================

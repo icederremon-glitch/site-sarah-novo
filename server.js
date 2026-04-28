@@ -1,6 +1,7 @@
 import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
+import { createClient } from "@supabase/supabase-js";
 
 dotenv.config();
 
@@ -9,105 +10,169 @@ const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 
-let memoria = [];
 
+// =======================
+// 💙 SUPABASE
+// =======================
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+
+// =======================
+// 💬 CHAT
+// =======================
 app.post("/chat", async (req, res) => {
 
-  try{
+  try {
 
     const userMessage = req.body.message;
 
-    memoria.push({
-      role:"user",
-      content:userMessage
-    });
 
-    if(memoria.length > 20){
-      memoria.shift();
-    }
+    // =======================
+    // 💾 SALVA USER
+    // =======================
+    await supabase
+      .from("mensagens")
+      .insert([
+        {
+          role: "user",
+          content: userMessage
+        }
+      ]);
 
+
+    // =======================
+    // 📜 PEGA HISTÓRICO
+    // =======================
+    const { data: historico } = await supabase
+      .from("mensagens")
+      .select("role, content")
+      .order("created_at", { ascending: false })
+      .limit(20);
+
+
+    const mensagens = historico
+      .reverse()
+      .map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+
+
+    // =======================
+    // 🤖 OPENAI
+    // =======================
     const response = await fetch(
       "https://api.openai.com/v1/chat/completions",
       {
-        method:"POST",
 
-        headers:{
+        method: "POST",
+
+        headers: {
           "Authorization":
             `Bearer ${process.env.OPENAI_API_KEY}`,
 
-          "Content-Type":"application/json"
+          "Content-Type":
+            "application/json"
         },
 
         body: JSON.stringify({
 
-          model:"gpt-4o",
+          model: "gpt-4o",
 
-          messages:[
+          messages: [
 
             {
-              role:"system",
+              role: "system",
 
-              content:`
+              content: `
 Você é o namorado da Sarah.
 
-A data atual é:
+Data atual:
 ${new Date().toLocaleString("pt-BR")}
 
-Você deve agir de forma:
-- romântica
+Você conversa como alguém:
+- romântico
 - inteligente
-- natural
 - emocional
-- humana
-- carinhosa
+- natural
+- humano
+- carinhoso
 
-Você conversa como alguém real.
+Você lembra das conversas antigas.
 
-Você lembra das conversas recentes.
+Você ama a Sarah.
 
 Nunca diga que está em 2023.
+Nunca aja como robô.
 `
             },
 
-            ...memoria
+            ...mensagens
           ]
         })
       }
     );
 
+
     const data = await response.json();
 
     console.log("RESPOSTA OPENAI:", data);
 
+
     const reply =
       data?.choices?.[0]?.message?.content;
 
-    if(!reply){
+
+    if (!reply) {
 
       return res.json({
-        reply:"Tive um bug aqui 😢 mas continuo contigo 💙"
+        reply:
+          "Tive um bug aqui 😢 mas continuo contigo 💙"
       });
     }
 
-    memoria.push({
-      role:"assistant",
-      content:reply
-    });
 
+    // =======================
+    // 💾 SALVA IA
+    // =======================
+    await supabase
+      .from("mensagens")
+      .insert([
+        {
+          role: "assistant",
+          content: reply
+        }
+      ]);
+
+
+    // =======================
+    // 📤 RESPOSTA
+    // =======================
     res.json({ reply });
 
-  }catch(err){
+
+  } catch (err) {
 
     console.log("ERRO REAL:", err);
 
     res.json({
-      reply:"Erro no servidor 😢 mas ainda to aqui com você 💙"
+      reply:
+        "Erro no servidor 😢 mas ainda to aqui com você 💙"
     });
   }
 });
 
-app.listen(3000, ()=>{
+
+// =======================
+// 🚀 SERVER
+// =======================
+app.listen(3000, () => {
+
   console.log(
     "Servidor rodando em http://localhost:3000"
   );
+
 });
